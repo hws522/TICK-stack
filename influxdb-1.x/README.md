@@ -256,3 +256,20 @@ password = "its@1234"
 
 <br>
 <br>
+
+**Chronograf**
+
+- https://dl.influxdata.com/chronograf/releases/chronograf-1.8.10_windows_amd64.zip
+
+  링크를 눌러 설치한다.
+
+<br>
+
+- nssm 을 이용하여 chronograf 서비스 등록한다.
+
+<br>
+
+- localhost:8888 로 접속하여 chronograf 화면을 확인한다.
+
+<br>
+<br>
