@@ -271,7 +271,11 @@ password = "its@1234"
 
 - localhost:8888 로 접속하여 chronograf 화면을 확인한다.
 
+<br>
+
 - 미리 만들어 놓은 dashboard  파일을 chronograf dashboard 화면에서 import 하여 저장한다.
+
+<br>
 
 - 데이터가 잘 들어오는지 확인한다. (들어오지 않는다면 telegraf.conf 세팅이 잘 됐는지, 재시작은 했는지, ip는 모두 일치 하는지 확인한다.)
 
