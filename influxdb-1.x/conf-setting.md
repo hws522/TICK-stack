@@ -722,3 +722,141 @@ InfluxDB 시스템에는 구성 파일의 모든 설정에 대한 내부 기본�
   기본값은 10초 (10s).
 
 <br>
+
+### **HTTP endpoints settings**
+
+<br>
+
+**[http]**
+
+[http] 섹션 설정은 InfluxDB가 HTTP 엔드포인트를 구성하는 방법을 제어한다.
+
+이러한 메커니즘은 InfluxDB로 데이터를 가져오거나 내보내는 주요 메커니즘이다.
+
+이 섹션의 설정을 편집하여 HTTPS 및 인증을 사용하도록 설정한다.
+
+<br>
+
+- enabled = true
+
+HTTP 끝 점이 활성화되었는지 여부를 결정한다.
+
+HTTP 엔드포인트 대한 액세스를 비활성화하려면 값을 false 로 설정하면 된다.
+
+InfluxDB 명령 줄 인터페이스 (CLI) 는 InfluxDB API 를 사용하여 데이터베이스에 연결된다.
+
+<br>
+
+- flux-enabled = false
+
+Flux 쿼리 끝 점이 활성화되었는지 여부를 확인한다.
+
+Flux 쿼리를 사용하려면 값을 true 로 설정하면 된다.
+
+<br>
+
+- bind-address = ":8086"
+
+HTTP 서비스에서 사용하는 바인드 주소 (포트).
+
+<br>
+
+- auth-enabled = false
+
+사용자 인증이 HTTP 및 HTTPS를 통해 활성화되는지 여부를 결정한다.
+
+인증을 요구하려면 값을 true 로 설정하면 된다.
+
+<br>
+
+- realm = "InfluxDB"
+
+기본 인증 문제를 발급할 때 다시 전송되는 기본 영역.
+
+영역은 HTTP 엔드 포인트에 사용되는 JWT 영역이다.
+
+<br>
+
+- log-enabled = true
+
+HTTP 요청 로깅을 사용할지 여부를 결정한다.
+
+로깅을 비활성화하려면 값을 false 로 설정하면 된다.
+
+<br>
+
+- suppress-write-log = false
+
+로그가 활성화 된 경우, HTTP 쓰기 요청 로그를 억제할지 여부를 결정한다.
+
+<br>
+
+- access-log-path = ""
+
+  `log-enabled = true` 를 사용하여 상세 쓰기 로깅을 사용할지 여부를 결정하는 액세스 로그 경로.
+
+  활성화된 경우, HTTP 요청 로깅을 지정된 경로에 쓸지 여부를 지정한다.
+
+  influxd 가 지정된 경로에 액세스할 수 없으면 오류를 기록하고 stderr로 돌아간다.
+
+  HTTP 요청 로깅을 사용하도록 설정한 경우, 이 옵션은 로그 항목을 기록할 경로를 지정한다.
+
+  지정되지 않은 경우, 기본값은 stderr에 쓰는 것으로 HTTP 로그를 내부 InfluxDB 로깅과 혼합한다.
+
+  influxd 가 지정된 경로에 액세스할 수 없는 경우, 오류를 기록하고 다시 stderr에 요청 로그를 쓴다.
+
+<br>
+
+- access-log-status-filters = []
+
+  기록할 요청을 필터링한다.
+
+  각 필터는 nnn, nnx 또는 nxx 패턴이며, 여기서 n은 숫자이고 x는 숫자에 대한 와일드카드다.
+
+  모든 5xx 응답을 필터링하려면 5xx 문자열을 사용하면 된다.
+
+  여러 개의 필터를 사용하는 경우 하나만 일치해야 한다.
+
+  기본값은 no filter 로 모든 요청이 인쇄되는 필터 없음이다.
+
+<br>
+
+- write-tracing = false
+
+  상세 쓰기 로깅을 사용할지 여부를 결정한다.
+
+  쓰기 페이로드에 대한 로깅을 활성화하려면 true로 설정한다.
+
+  true로 설정하면 로그의 모든 쓰기 문이 복제되므로 일반 용도로는 권장되지 않는다.
+
+<br>
+
+- pprof-enabled = true
+
+  /net/http/pprof HTTP 엔드포인트가 사용 가능한지 여부를 결정한다.
+
+  문제 해결 및 모니터링에 유용하다.
+
+<br>
+
+- pprof-auth-enabled = false
+
+  /debug 엔드포인트에서 인증을 사용하도록 설정한다.
+
+  사용 가능한 경우 다음 엔드포인트에 액세스하려면 관리자 권한이 필요하다.
+
+  - /debug/pprof
+  - /debug/requests
+  - /debug/vars
+
+  이 설정은 auth-enabled 또는 pprof-enabled 이 false 로 설정된 경우에는 적용되지 않는다.
+
+<br>
+
+- debug-pprof-enabled = false
+
+  기본 /pprof 엔드포인트를 사용하도록 설정하고 localhost:6060에 대해 바인딩한다.
+
+  시작 성능 문제를 디버깅하는 데 유용하다.
+
+<br>
