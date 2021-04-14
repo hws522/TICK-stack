@@ -418,3 +418,307 @@ InfluxDB 시스템에는 구성 파일의 모든 설정에 대한 내부 기본�
   이 설정은 모든 키를 확인해야하므로 약간의 오버 헤드가 발생한다.
 
 <br>
+
+### **Settings for the TSM engine**
+
+<br>
+
+- cache-max-memory-size = "1g"
+
+  쓰기 거부를 시작하기 전에 샤드 캐시가 도달할 수있는 최대 크기.
+
+  유효 메모리 크기 접미사는 k, m, g (대소문자 구별 - 1K = 1,024).
+
+  크기 접미사가 없는 값은 바이트 단위다. (ex> 1073741824)
+
+<br>
+
+- cache-snapshot-memory-size = "25m"
+
+  엔진이 캐시를 스냅 샷하고 TSM 파일에 기록하여 메모리를 확보하는 크기.
+
+  유효 메모리 크기 접미사은 k, m, g (대소 문자 구별, 1K = 1,024).
+
+  크기 접미사가없는 값은 바이트 단위다.
+
+<br>
+
+- cache-snapshot-write-cold-duration = "10m"
+
+  샤드가 쓰기 또는 삭제를 수신하지 않은 경우, 엔진이 캐시를 스냅 샷하고 새 TSM 파일에 쓰는 시간 간격.
+
+<br>
+
+- compact-full-write-cold-duration = "4h"
+
+  쓰기 또는 삭제를 수신하지 않은 경우, TSM 엔진이 샤드의 모든 TSM 파일을 압축하는 시간 간격.
+
+<br>
+
+- max-concurrent-compactions = 0
+
+  한 번에 실행할 수있는 동시 전체 및 레벨 압축의 최대 수.
+
+  기본값 0 은 압축을 위해 런타임시 CPU 코어의 50%가 사용된다.
+
+  명시적으로 설정하면 압축에 사용되는 코어 수가 지정된 값으로 제한된다.
+
+  이 설정은 캐시 스냅 샷에 적용되지 않는다.
+
+<br>
+
+- compact-throughput = "48m"
+
+  TSM 압축이 디스크에 쓰는 초당 최대 바이트 수.
+
+  기본값은 "48m"(480,000,000).
+
+  short burst 는 compact-throughput-burst 에 의해 설정된 더 큰 값에서 발생할 수 있다.
+
+<br>
+
+- compact-throughput-burst = "48m"
+
+  short burst 동안 TSM 압축이 디스크에 쓰는 최대 초당 바이트 수.
+
+<br>
+
+- tsm-use-madv-willneed = false
+
+  true 일 경우, MMap Advisory 값 MADV_WILLNEED 는 입력/출력 페이징 측면에서 매핑된 메모리 영역을 처리하는 방법과 TSM 파일과 관련하여 매핑된 메모리 영역에 대한 액세스를 예상하는 방법에 대해 커널에 조언한다.
+
+  이 설정은 일부 커널(CentOS 및 RHEL 포함) 에서 문제가 있으므로 기본값은 false.
+
+  값을 true로 변경하면 경우에 따라 Disk가 느린 사용자에게 도움이 될 수 있다.
+
+<br>
+
+### **In-memory (inmem) index settings**
+
+<br>
+
+- max-series-per-database = 1000000
+
+  데이터베이스 당 허용되는 최대 시리즈 수.
+
+  기본 설정은 1000000.
+
+  데이터베이스 당 무제한 시리즈 수를 허용 하려면 설정을 0 으로 변경하면 된다.
+
+  포인트로 인해 데이터베이스의 시리즈 수가 max-series-per-database 를 초과하면 InfluxDB는 포인트를 쓰지 않고 다음 오류와 함께 500 을 반환한다.
+
+      {"error":"max series per database exceeded: <series>"}
+
+<br>
+
+- max-values-per-tag = 100000
+
+  태그 키당 허용되는 최대 태그 값 수.
+
+  기본값은 100000.
+
+  태그 키당 태그 값 수를 제한하지 않으려면 설정을 0으로 변경하면 된다.
+
+  태그 값으로 인해 태그 키의 태그 값 수가 태그당 최대값을 초과할 경우, InfluxDB는 포인트를 쓰지 않고 partial write 오류를 반환한다.
+
+<br>
+
+### **TSI (tsi1) index settings**
+
+<br>
+
+- max-index-log-file-size = "1m"
+
+  인덱스 WAL(Write-ahead Log) 파일이 인덱스 파일로 압축되는 임계값(바이트).
+
+  크기가 작을수록 로그 파일이 더 빨리 압축되고 쓰기 처리량을 희생하여 힙 사용량이 줄어든다.
+
+  크기가 클수록 압축 빈도가 낮아지고, 더 많은 시리즈 인메모리를 저장하며, 더 높은 쓰기 처리량을 제공한다.
+
+  올바른 크기 접미사는 k, m, g (대소문자 구분, 1024 = 1k).
+
+  크기 접미사가 없는 값은 바이트다.
+
+<br>
+
+- series-id-set-cache-size = 100
+
+  TSI 인덱스에서 이전에 계산된 시리즈 결과를 저장하는 데 사용되는 내부 캐시 크기.
+
+  일치하는 태그 키-값 술어를 가진 후속 쿼리를 실행할 때 다시 계산하지 않고 캐시된 결과가 캐시에서 빠르게 반환된다.
+
+  이 값을 0으로 설정하면 캐시가 비활성화되어 쿼리 성능 문제가 발생할 수 있다.
+
+  데이터베이스에 대한 모든 측정에서 정기적으로 사용되는 태그 키-값 술어 집합이 100 보다 큰 경우에만 이 값을 증가시켜야 한다.
+
+  캐시 크기가 증가하면 힙 사용량이 증가할 수 있다.
+
+<br>
+
+### **Query management settings**
+
+<br>
+
+**[coordinator]**
+
+이 섹션에는 쿼리 관리를 위한 구성 설정이 포함되어 있다.
+
+<br>
+
+- write-timeout = "10s"
+
+  쓰기 요청이 "시간 초과" 오류가 호출자에게 반환될 때까지 대기하는 기간.
+
+  기본값은 10초다.
+
+<br>
+
+- max-concurrent-queries = 0
+
+  인스턴스에서 허용된 최대 실행 쿼리 수.
+
+  기본 설정 (0) 에서는 쿼리 수를 제한하지 않는다.
+
+<br>
+
+- query-timeout = "0s"
+
+  InfluxDB가 쿼리를 종료하기 전에 쿼리가 실행될 수 있는 최대 기간.
+
+  기본 설정 (0) 에서는 시간 제한 없이 쿼리를 실행할 수 있다.
+
+  이 설정은 (ns, us, ms, s, m, h, d, w) 다.
+
+<br>
+
+- log-queries-after = "0s"
+
+  InfluxDB가 "Detected slow query" 메시지와 함께 쿼리를 기록 할 때 까지 쿼리가 수행 할 수있는 최대 기간.
+
+  기본 설정 ("0") 은 InfluxDB 에 쿼리를 기록하도록 지시하지 않는다.
+
+  이 설정은 (ns, us, ms, s, m, h, d, w) 다.
+
+<br>
+
+- max-select-point = 0
+
+  SELECT 명령문이 처리 할 수 있는 최대 포인트 수.
+
+  기본 설정 (0) 을 사용하면 SELECT 명령문이 무제한의 포인트를 처리 할 수 ​​있다.
+
+<br>
+
+- max-select-series = 0
+
+  SELECT 명령문이 처리 할 수 있는 최대 시리즈 수.
+
+  기본 설정 (0) 을 사용하면 SELECT 명령문이 무제한의 시리즈를 처리할 수 있다.
+
+<br>
+
+- max-select-buckets = 0
+
+  GROUP BY time() 쿼리가 처리 할 수있는 최대 버킷 수.
+
+  기본 설정 (0) 을 사용하면 쿼리가 무제한의 버킷을 처리 할 수 ​​있다.
+
+<br>
+
+### **Retention policy settings**
+
+<br>
+
+**[retention]**
+
+이 설정은 오래된 데이터를 제거하기 위한 보존 정책의 시행을 제어한다.
+
+<br>
+
+- enabled = true
+
+  false 로 설정하면 보존 정책을 시행하지 않는다.
+
+<br>
+
+- check-interval = "30m0s"
+
+  InfluxDB가 보존 정책을 시행하기 위해 확인하는 시간 간격.
+
+<br>
+
+### **Shard precreation settings**
+
+<br>
+
+**[shard-precreation]**
+
+이 [shard-precreation]설정은 데이터가 도착하기 전에 샤드를 사용할 수 있도록 샤드의 사전 생성을 제어한다.
+
+생성 후 향후 시작 및 종료 시간이 모두 있는 샤드만 생성된다.
+
+전체적으로 또는 부분적으로 과거에 있었던 샤드는 결코 미리 생성되지 않는다.
+
+<br>
+
+- enabled = true
+
+  샤드 사전 생성 서비스의 활성화 여부를 결정한다.
+
+<br>
+
+- check-interval = "10m"
+
+  새 샤드 사전 생성 확인이 실행되는 시간 간격.
+
+<br>
+
+- advance-period = "30m"
+
+  InfluxDB가 샤드를 미리 생성하는 미래의 최대 기간.
+
+  30m 기본값은 대부분의 시스템에 적용된다.
+
+  향후 이 설정을 너무 많이 늘리면 비효율성이 발생할 수 있다.
+
+<br>
+
+### **Monitoring settings**
+
+<br>
+
+**[monitor]**
+
+[monitor] 섹션 설정은 InfluxDB 시스템 자체 모니터링을 제어한다.
+
+기본적으로 InfluxDB는 데이터를 \_internal 데이터베이스에 기록한다.
+
+데이터베이스가 없는 경우 InfluxDB는 데이터베이스를 자동으로 생성한다.
+
+\_internal 데이터베이스의 기본 보존 정책은 7일.
+
+7일 보존 정책 이외의 보존 정책을 사용하려면 해당 정책을 생성해야 한다.
+
+<br>
+
+- store-enabled = true
+
+  내부적으로 통계를 기록하지 않으려면 false로 설정한다.
+
+  하지만 false 로 설정하면 설치 문제를 진단하기가 상당히 어려워진다.
+
+<br>
+
+- store-database = "\_internal"
+
+  기록 된 통계의 대상 데이터베이스.
+
+<br>
+
+- store-interval = "10s"
+
+  InfluxDB가 통계를 기록하는 시간 간격.
+
+  기본값은 10초 (10s).
+
+<br>
