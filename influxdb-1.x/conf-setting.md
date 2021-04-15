@@ -11,6 +11,8 @@
 
 Telegraf 의 config 파일에 대한 좀 더 세부적인 내용을 정리합니다.
 
+`일부 오역이 있을 경우 수정할 예정.`
+
 <br>
 <br>
 
@@ -1045,4 +1047,485 @@ HTTP 요청 로깅을 사용할지 여부를 결정한다.
 
 이 [subscriber]섹션은 Kapacitor 가 데이터를 수신 하는 방법을 제어한다.
 
+<br>
+
+- enabled = true
+
+  구독자 서비스의 사용 여부 결정.
+
+  구독자 서비스를 비활성화하려면 값을 false 로 설정한다.
+
+<br>
+
+- http-timeout = "30s"
+
+  구독자에게 HTTP 쓰기가 시간 초과 될 때까지 실행되는 시간.
+
+<br>
+
+- insecure-skip-verify = false
+
+  구독자에게 안전하지 않은 HTTPS 연결을 허용할지 여부를 결정한다.
+
+  이는 자체 서명 된 인증서로 테스트 할 때 유용하다.
+
+<br>
+
+- ca-certs = ""
+
+  PEM으로 인코딩 된 CA 인증서 파일의 경로.
+
+  값이 빈 문자열 ("") 이면 기본 시스템 인증서가 사용된다.
+
+<br>
+
+- write-concurrency = 40
+
+  쓰기 채널을 처리하는 작성자 또는 루틴의 수.
+
+<br>
+
+- write-buffer-size = 1000
+
+  쓰기 채널에서 버퍼링된 진행 중인 쓰기 수.
+
+<br><br>
+
+### **Graphite settings**
+
+<br>
+
+**[[graphite]]**
+
+이 섹션은 Graphite data 에 대한 하나 이상의 수신기를 제어한다.
+
+<br>
+
+- enabled = false
+
+  graphite 입력을 활성화하려면 true 로 설정한다.
+
+<br>
+
+- database = "graphite"
+
+  사용하려는 데이터베이스의 이름.
+
+<br>
+
+- retention-policy = ""
+
+  관련 보존 정책.
+
+  빈 문자열은 데이터베이스의 기본 보존 정책과 동일하다.
+
+<br>
+
+- bind-address = ":2003"
+
+  기본 포트 값.
+
+<br>
+
+- protocol = "tcp"
+
+  tcp 또는 udp 로 설정한다.
+
+<br>
+
+- consistency-level = "one"
+
+  쓰기를 확인해야하는 노드 수.
+
+  요구사항이 충족되지 않을 때 배치의 일부 포인트가 실패할 경우, partial write 를 반환 값으로 반환한다.
+
+  모든 포인트가 실패할 경우, write failure 를 반환값으로 반환한다.
+
+<br>
+
+`다음 세 가지 설정은 일괄 처리 작동 방식을 제어한다. 이 기능을 활성화하지않으면 메트릭이 삭제되거나 성능이 저하 될 수 있다. 일괄 처리는 많이 들어오는 경우 메모리에 포인트를 버퍼링한다.`
+
+<br>
+
+- batch-size = 5000
+
+  이 포인트들이 버퍼링되면 입력이 플러시된다.
+
+<br>
+
+- batch-pending = 10
+
+  메모리에서 보류중인 배치 수.
+
+<br>
+
+- batch-timeout = "1s"
+
+  입력이 구성된 배치 크기에 도달하지 않은 경우에도 설정한 시간만큼의 빈도로 플러시 된다.
+
+<br>
+
+- udp-read-buffer = 0
+
+  UDP 읽기 버퍼 크기, 0 은 OS 기본값을 의미한다.
+
+  OS 최대값보다 높게 설정하면 UDP 수신기가 실패한다.
+
+<br>
+
+- separator = "."
+
+  이 문자열은 일치하는 여러 '측정' 값을 결합하여 최종 측정 이름에 대한 제어력을 높인다.
+
+<br>
+<br>
+
+### **CollectD settings**
+
+<br>
+
+**[[collectd]]**
+
+[collected] 설정은 collectD data 에 대한 수신기를 제어한다.
+
+<br>
+
+- enabled = false
+
+  collectD 쓰기를 사용하려면 true로 설정한다.
+
+<br>
+
+- bind-address = ":25826"
+
+  기본 포트 값.
+
+<br>
+
+- database = "collectd"
+
+  사용하려는 데이터베이스의 이름.
+
+<br>
+
+- retention-policy = ""
+
+  관련 보존 정책.
+
+  빈 문자열은 데이터베이스의 기본 보존 정책과 동일하다.
+
+<br>
+
+- typesdb = "/usr/local/share/collectd"
+
+  collectd 서비스는 디렉토리에서 여러 유형의 db 파일을 검색하거나 단일 db 파일을 지정할 수 있다.
+
+<br>
+
+`다음 세 가지 설정은 일괄 처리 작동 방식을 제어한다. 이 기능을 활성화하지않으면 메트릭이 삭제되거나 성능이 저하 될 수 있다. 일괄 처리는 많이 들어오는 경우 메모리에 포인트를 버퍼링한다.`
+
+<br>
+
+- batch-size = 5000
+
+  이 포인트들이 버퍼링되면 입력이 플러시된다.
+
+<br>
+
+- batch-pending = 10
+
+  메모리에서 보류중인 배치 수.
+
+<br>
+
+- batch-timeout = "10s"
+
+  입력이 구성된 배치 크기에 도달하지 않은 경우에도 설정한 시간만큼의 빈도로 플러시 된다.
+
+<br>
+
+- read-buffer = 0
+
+  UDP 읽기 버퍼 크기, 0 은 OS 기본값을 의미한다.
+
+  OS 최대값보다 높게 설정하면 UDP 수신기가 실패한다.
+
+<br>
+
+- parse-multivalue-plugin = "split"
+
+  split 으로 설정하면 다중값 플러그인 데이터(예: dfree:filename, used:1000)가 별도의 측정(예: (df_free, value=filename)(df_used, value=1000))으로 분할된다.
+
+  join 으로 설정하면 다중값 플러그인이 단일 다중값 측정(예: (df, free=hdp, used=1000)으로 저장된다.
+
+  기본값은 split.
+
+<br>
+<br>
+
+### **OpenTSDB settings**
+
+<br>
+
+**[[opentsdb]]**
+
+이 섹션은 OpenTSDB data 에 대한 리스너를 제어한다.
+
+<br>
+
+- enabled = false
+
+  openTSDB 쓰기를 사용하려면 true 로 설정한다.
+
+<br>
+
+- bind-address = ":4242"
+
+  기본 포트 값.
+
+<br>
+
+- database = "opentsdb"
+
+  사용하려는 데이터베이스의 이름.
+
+  데이터베이스가 없는 경우, 입력이 초기화될 때 자동으로 생성된다.
+
+<br>
+
+- retention-policy = ""
+
+  관련 보존 정책.
+
+  빈 문자열은 데이터베이스의 기본 보존 정책과 동일하다.
+
+<br>
+
+- consistency-level = "one"
+
+  쓰기에 대한 일관성 수준 (any, one, quorum 또는 all) 을 설정한다.
+
+<br>
+
+- log-point-errors = true
+
+  모든 잘못된 포인트에 대해 오류를 기록한다.
+
+<br>
+
+`다음 세 가지 설정은 일괄 처리 작동 방식을 제어한다. 이 기능을 활성화하지않으면 메트릭이 삭제되거나 성능이 저하 될 수 있다. 일괄 처리는 많이 들어오는 경우 메모리에 포인트를 버퍼링한다.`
+
+<br>
+
+- batch-size = 1000
+
+  이 포인트들이 버퍼링되면 입력이 플러시된다.
+
+<br>
+
+- batch-pending = 5
+
+  메모리에서 보류중인 배치 수.
+
+<br>
+
+- batch-timeout = "1s"
+
+  입력이 구성된 배치 크기에 도달하지 않은 경우에도 설정한 시간만큼의 빈도로 플러시 된다.
+
+<br>
+<br>
+
+### **UDP settings**
+
+<br>
+
+**[[udp]]**
+
+[[udp]]설정은 UDP를 사용하여 InfluxDB 라인 프로토콜 데이터에 대한 수신기를 제어한다.
+
+<br>
+
+- enabled = false
+
+  UDP를 통한 쓰기를 활성화 하려면 true 로 설정한다.
+
+<br>
+
+- bind-address = ":8089"
+
+  빈 문자열은 0.0.0.0 과 같다.
+
+<br>
+
+- database = "udp"
+
+  쓰려는 데이터베이스의 이름.
+
+<br>
+
+- retention-policy = ""
+
+  관련 보존 정책.
+
+  빈 문자열은 데이터베이스의 기본 보존 정책과 동일하다.
+
+<br>
+
+`다음 세 가지 설정은 일괄 처리 작동 방식을 제어한다. 이 기능을 활성화하지않으면 메트릭이 삭제되거나 성능이 저하 될 수 있다. 일괄 처리는 많이 들어오는 경우 메모리에 포인트를 버퍼링한다.`
+
+<br>
+
+- batch-size = 5000
+
+  이 포인트들이 버퍼링되면 입력이 플러시된다.
+
+<br>
+
+- batch-pending = 10
+
+  메모리에서 보류중인 배치 수.
+
+<br>
+
+- batch-timeout = "1s"
+
+  입력이 구성된 배치 크기에 도달하지 않은 경우에도 설정한 시간만큼의 빈도로 플러시 된다.
+
+<br>
+
+- read-buffer = 0
+
+  UDP 읽기 버퍼 크기, 0 은 OS 기본값을 의미한다.
+
+  OS 최대값보다 높게 설정하면 UDP 수신기가 실패한다.
+
+<br>
+
+- precision = ""
+
+  시간 값을 디코딩할 때 사용되는 시간 정밀도.
+
+  기본값은 데이터베이스의 기본값인 nonoseconds.
+
+<br>
+<br>
+
+### **Continuous queries settings**
+
+<br>
+
+**[continuous_queries]**
+
+[Continuous_query] 설정은 InfluxDB 내에서 연속 쿼리 (CQ) 를 실행하는 방법을 제어한다.
+
+연속 쿼리는 최근 시간 간격 동안 실행되는 자동 쿼리 배치다.
+
+InfluxDB는 GROUP BY time() 간격마다 하나의 자동 생성된 쿼리를 실행한다.
+
+<br>
+
+- enabled = true
+
+  CQ 를 비활성화 하려면 값을 false 로 설정한다.
+
+<br>
+
+- log-enabled = true
+
+  CQ 이벤트에 대한 로깅을 사용하지 않으려면 false로 설정한다.
+
+<br>
+
+- query-stats-enabled = false
+
+  true로 설정하면 연속 쿼리 실행 통계가 기본 모니터 저장소에 기록된다.
+
+<br>
+
+- run-interval = "1s"
+
+  InfluxDB 가 CQ 를 실행해야 하는지 확인하는 간격.
+
+  이 옵션을 CQ가 실행되는 가장 낮은 간격으로 설정한다.
+
+  예를 들어, 가장 빈번한 CQ가 매 분마다 실행되는 경우 run 간격을 1m 로 설정한다.
+
+<br>
+<br>
+
+### **Transport Layer Security (TLS) settings**
+
+<br>
+
+**[tls]**
+
+InfluxDB의 TLS (전송 계층 보안) 에 대한 전역 구성 설정.
+
+TLS 구성 설정이 지정되지 않은 경우, InfluxDB는 InfluxDB를 빌드하는 데 사용되는 Go 버전에 따라 Go crypto/tls 패키지 설명서의 상수 섹션에 구현된 모든 Crypto Suite ID와 모든 TLS 버전을 지원한다.
+
+Show Diagnostics 명령을 사용하여 IndustryDB 구축에 사용되는 Go 버전을 확인한다.
+
+<br>
+
+**"최신 호환성"을위한 권장 서버 구성**
+
+InfluxData 에서는 "최신 호환성" 을 위해 InfluxDB 서버의 TLS 설정을 구성할 것을 권장한다.
+
+이는 더 높은 수준의 보안을 제공하며, 이전 버전과의 호환성이 필요하지 않다고 추정한다.
+
+ciphers, min-version 및 max-version 에 대한 권장 TLS 구성 설정은 Security/Server Side TLS에 설명된 Mozilla의 "최신 호환성" TLS 서버 구성을 기반으로 한다.
+
+"최신 호환성"에 대한 InfluxData의 권장 TLS 설정은 다음 구성 설정 예제에 지정되어 있다.
+
+<br>
+
+```
+ciphers = [ "TLS_AES_128_GCM_SHA256",
+            "TLS_AES_256_GCM_SHA384",
+            "TLS_CHACHA20_POLY1305_SHA256"
+]
+
+min-version = "tls1.3"
+
+max-version = "tls1.3"
+```
+
+<br>
+
+- ciphers = [ "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305", "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256", ]
+
+  협상할 암호 그룹 ID 집합을 지정한다.
+
+  지정되지 않은 경우, 암호는 Go crypto/tls 패키지에 나열된 모든 기존 암호 그룹 ID를 지원한다.
+
+  이는 이전 릴리스의 동작과 일치한다.
+
+  이 예에서는 지정된 두 개의 암호 집합 ID만 지원된다.
+
+<br>
+
+- min-version = "tls1.0"
+
+  협상할 TLS 프로토콜의 최소 버전.
+
+  유효한 값으로는 tls1.0, tls1.1, tls1.2 및 tls1.3이 있다.
+
+  지정되지 않은 경우, 최소 버전은 Go crypto/tls 패키지에 지정된 최소 TLS 버전.
+
+  이 예에서 tls1.0 은 최소 버전을 TLS 1.0 으로 지정하며, 이는 이전 InfluxDB 릴리스의 동작과 일치한다.
+
+<br>
+
+- max-version = "tls1.3"
+
+  협상할 TLS 프로토콜의 최대 버전.
+
+  유효한 값으로는 tls1.0, tls1.1, tls1.2 및 tls1.3이 있다.
+
+  지정되지 않은 경우, max-version 은 go crypto/tls 패키지에 지정된 최대 TLS 버전.
+
+  이 예에서 tls1.3 은 최대 버전을 TLS 1.3 으로 지정하며, 이는 이전 InfluxDB 릴리스의 동작과 일치한다.
+
+<br>
 <br>
