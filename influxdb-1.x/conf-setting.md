@@ -3,7 +3,7 @@
 <br>
 <br>
 
-Telegraf 의 config 파일에 대한 좀 더 세부적인 내용을 정리합니다.
+Telegraf, InfluxDB 의 config 파일에 대한 좀 더 세부적인 내용을 정리합니다.
 
 `일부 오역이 있을 경우 수정할 예정.`
 
