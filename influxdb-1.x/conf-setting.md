@@ -860,3 +860,189 @@ HTTP 요청 로깅을 사용할지 여부를 결정한다.
   시작 성능 문제를 디버깅하는 데 유용하다.
 
 <br>
+
+- ping-auth-enabled = false
+
+  /ping, /metrics 및 사용되지 않는 /status 엔드포인트에서 인증을 사용한다.
+
+  이 설정은 false 로 설정된 경우 적용되지 않는다.
+
+<br>
+
+- http-headers
+
+  사용자가 제공한 HTTP 응답 헤더.
+
+  필요한 경우 X-Frame-Options 또는 Content Security Policy 와 같은 보안 헤더를 반환하도록 이 섹션을 구성한다.
+
+  ex)
+
+  ```conf
+    [http.headers]
+  X-Frame-Options = "DENY"
+  ```
+
+  <br>
+
+- https-enabled = false
+
+  HTTPS의 사용 여부를 결정한다.
+
+  HTTPS를 활성화하려면 true로 설정.
+
+<br>
+
+- https-certificate = "/etc/ssl/influxdb.pem"
+
+  HTTPS가 활성화 된 경우 사용할 SSL 인증서 파일의 경로.
+
+<br>
+
+- https-private-key = ""
+
+  별도의 개인 키 위치를 사용한다.
+
+  https-certificate 만 지정한 경우, httpd 서비스는 https-certificate 파일에서 개인 키를 로드하려고 시도한다.
+
+  별도의 https-private-key 파일이 지정된 경우, httpd 서비스는 https-private-key 파일에서 개인 키를 로드한다.
+
+<br>
+
+- shared-secret = ""
+
+  JWT 토큰을 사용하여 공용 API 요청을 검증하는 데 사용되는 공유 암호.
+
+<br>
+
+- max-row-limit = 0
+
+  시스템이 청크되지 않은 쿼리에서 반환할 수 있는 최대 행 수.
+
+  기본 설정 (0) 에서는 행 수를 제한하지 않는다.
+
+  쿼리 결과가 지정된 값을 초과하면 InfluxDB 는 응답 본문에 "partial":true 태그를 포함한다.
+
+<br>
+
+- max-connection-limit = 0
+
+  한 번에 열 수 있는 최대 연결 수.
+
+  제한을 초과하는 새 연결은 삭제된다.
+
+  기본값 0 은 제한을 사용하지 않도록 설정한다.
+
+<br>
+
+- unix-socket-enabled = false
+
+  UNIX 도메인 소켓을 통해 HTTP 서비스를 활성화한다.
+
+  UNIX 도메인 소켓을 통해 HTTP 서비스를 활성화하려면 값을 true 로 설정하면 된다.
+
+<br>
+
+- bind-socket = "/var/run/influxdb.sock"
+
+  UNIX 도메인 소켓의 경로.
+
+<br>
+
+- max-body-size = 25000000
+
+  클라이언트 요청 본문의 최대 크기(바이트).
+
+  HTTP 클라이언트가 구성된 최대 크기를 초과하는 데이터를 보내면 413 Request Entity Too Large HTTP 응답이 반환된다.
+
+  제한을 비활성화하려면 값을 0 으로 설정한다.
+
+<br>
+
+- max-concurrent-write-limit = 0
+
+  동시에 처리할 수 있는 최대 쓰기 수.
+
+  제한을 비활성화하려면 값을 0 으로 설정한다.
+
+<br>
+
+- max-enqueued-write-limit = 0
+
+  처리를 위해 대기 중인 최대 쓰기 수.
+
+  제한을 비활성화하려면 값을 0 으로 설정한다.
+
+<br>
+
+- enqueued-write-timeout = 0
+
+  큐에서 쓰기가 처리되기를 기다리는 최대 기간.
+
+  제한을 비활성화하려면 이 값을 0 으로 설정하거나 max-concurrent-write-limit 값을 0으로 설정하면 된다.
+
+<br>
+
+- [http.headers]
+
+  [http.headers]섹션을 사용하여 사용자 제공 HTTP 응답 헤더를 구성한다.
+
+  ```conf
+  # [http.headers]
+  #   X-Header-1 = "Header Value 1"
+  #   X-Header-2 = "Header Value 2"
+  ```
+
+<br>
+<br>
+
+### **Logging settings**
+
+<br>
+
+**[logging]**
+
+로거가 출력으로 로그를 내보내는 방식을 제어한다.
+
+<br>
+
+- format = "auto"
+
+  로그에 사용할 로그 인코더를 결정한다.
+
+  유효한 값은 auto(기본값), logfmt, json.
+
+  기본 auto 옵션에서는 출력이 TTY 장치(예: 터미널)로 되어 있는 경우, 보다 사용자에게 친숙한 콘솔 인코딩이 사용된다.
+
+  파일로 출력되는 경우, 자동 옵션은 logfmt 인코딩을 사용한다.
+
+  logfmt 및 json 옵션은 외부 도구와의 통합에 유용하다.
+
+<br>
+
+- level = "info"
+
+  내보낼 로그 수준.
+
+  올바른 값은 error, warn, info(기본값), debug.
+
+  지정한 수준과 같거나 그 이상인 로그가 내보내진다.
+
+<br>
+
+- suppress-logo = false
+
+  프로그램을 시작할 때 인쇄되는 로고 출력을 표시하지 않는다.
+
+  STDOUT가 TTY가 아닌 경우 로고는 항상 억제된다.
+
+<br><br>
+
+### **Subscription settings**
+
+<br>
+
+**[subscriber]**
+
+이 [subscriber]섹션은 Kapacitor 가 데이터를 수신 하는 방법을 제어한다.
+
+<br>
