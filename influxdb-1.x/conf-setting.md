@@ -1464,7 +1464,7 @@ InfluxDB의 TLS (전송 계층 보안) 에 대한 전역 구성 설정.
 
 TLS 구성 설정이 지정되지 않은 경우, InfluxDB는 InfluxDB를 빌드하는 데 사용되는 Go 버전에 따라 Go crypto/tls 패키지 설명서의 상수 섹션에 구현된 모든 Crypto Suite ID와 모든 TLS 버전을 지원한다.
 
-Show Diagnostics 명령을 사용하여 IndustryDB 구축에 사용되는 Go 버전을 확인한다.
+Show Diagnostics 명령을 사용하여 InfluxDB 구축에 사용되는 Go 버전을 확인한다.
 
 <br>
 
