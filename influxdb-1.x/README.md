@@ -101,8 +101,8 @@ windows 기준으로 Telegraf, InfluxDB, Chronograf 설치방법을 정리한다
 # Configuration for telegraf agent
 [agent]
   ## Default data collection interval for all inputs
-  interval = "500ms"
-  precision = "500ms"
+  interval = "100ms"
+  precision = "100ms"
 
 ###############################################################################
 #                                  OUTPUTS                                    #
@@ -127,78 +127,120 @@ password = "its@1234"
 #                                  INPUTS                                     #
 ###############################################################################
 
-[[inputs.modbus]]
-  name = "Modbus-test"
-  slave_id = 1
-  interval = "500ms"
-  timeout = "2s"
-  controller = "tcp://192.168.100.31:502" #ip setting
-  holding_registers = [
-  { name = "Curr_MAX",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1299]},
-  { name = "Curr_IL1",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1300]},
-	{ name = "Curr_IL2",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1301]},
-	{ name = "Curr_IL3",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1302]},
-	{ name = "Volt_AVG",        byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1303]},
-	{ name = "Volt_L1L2",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1304]},
-	{ name = "Volt_L2L3",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1305]},
-	{ name = "Volt_L3L1",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1306]},
-  { name = "Temp",            byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1307]},
-  { name = "P_Acive",         byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1309]}, # 유효 전력
-  { name = "P_Acive_Mhours",  byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1311]}, # 유효 전력 적산
-  { name = "Motor_Life_Day",  byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1315]}, # 구동 일수
-  { name = "Motor_Life_Hour", byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1316]}, # 구동 시간
-  { name = "Motor_count", byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1317]}, #모터 동작 횟수
-  { name = "Ground",          byte_order = "AB", data_type = "FLOAT32", scale=0.001, address = [1318]},
-  ]
-
-  [[inputs.modbus]]
-  name = "Modbus-simulator"
-  slave_id = 1
-  interval = "500ms"
-  timeout = "2s"
-  controller = "tcp://192.168.100.75:9600"
-  holding_registers = [
-  { name = "Curr_MAX",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [900]},
-  { name = "Curr_IL1",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [901]},
-	{ name = "Curr_IL2",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [902]},
-	{ name = "Curr_IL3",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [903]},
-	{ name = "Volt_AVG",        byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [904]},
-	{ name = "Volt_L1L2",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [905]},
-	{ name = "Volt_L2L3",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [906]},
-	{ name = "Volt_L3L1",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [907]},
-  { name = "Temp",            byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [908]},
-  { name = "P_Acive",         byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [910]}, # 유효 전력
-  { name = "P_Acive_Mhours",  byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [912]}, # 유효 전력 적산
-  { name = "Motor_Life_Day",  byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [916]}, # 구동 일수
-  { name = "Motor_Life_Hour", byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [917]}, # 구동 시간
-  { name = "Motor_count", byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [918]}, #  모터 동작 횟수
-  { name = "Ground",          byte_order = "AB", data_type = "FLOAT32", scale=0.001, address = [919]},
-  ]
+# [[inputs.modbus]]
+# name = "SE-4F-31"
+# slave_id = 1
+# interval = "100ms"
+# timeout = "1s"
+# controller = "tcp://192.168.100.31:502"
+# holding_registers = [
+#   { name = "Curr_MAX",  byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1300]},
+#   { name = "harmonic-I-1",  byte_order = "AB", data_type = "INT16", scale=1.0, address = [1331]},
+#   { name = "harmonic-I-3",  byte_order = "AB", data_type = "INT16", scale=1.0, address = [1358]},
+# ]
 
 [[inputs.modbus]]
-  name = "Modbus-simulator-51"
+  name = "Modbus-se1"
   slave_id = 1
-  interval = "500ms"
-  timeout = "2s"
-  controller = "tcp://192.168.100.51:9100"
+  interval = "100ms"
+  timeout = "1s"
+  controller = "tcp://192.168.100.38:502"
   holding_registers = [
-  { name = "Curr_MAX",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1299]},
-  { name = "Curr_IL1",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1300]},
-	{ name = "Curr_IL2",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1301]},
-	{ name = "Curr_IL3",        byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1302]},
-	{ name = "Volt_AVG",        byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1303]},
-	{ name = "Volt_L1L2",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1304]},
-	{ name = "Volt_L2L3",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1305]},
-	{ name = "Volt_L3L1",       byte_order = "AB", data_type = "FLOAT32", scale=1.0,  address = [1306]},
-  { name = "Temp",            byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1307]},
-  { name = "P_Acive",         byte_order = "AB", data_type = "FLOAT32", scale=0.01, address = [1309]}, # 유효 전력
-  { name = "P_Acive_Mhours",  byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1311]}, # 유효 전력 적산
-  { name = "Motor_Life_Day",  byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1315]}, # 구동 일수
-  { name = "Motor_Life_Hour", byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1316]}, # 구동 시간
-  { name = "Motor_count", byte_order = "AB", data_type = "FLOAT32", scale=1.0, address = [1317]}, # 모터 동작 횟수
-  { name = "Ground",          byte_order = "AB", data_type = "FLOAT32", scale=0.001, address = [1318]},
+  { name = "Curr_MAX",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1299]},
+  { name = "Curr_IL1",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1300]},
+	{ name = "Curr_IL2",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1301]},
+	{ name = "Curr_IL3",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1302]},
+	{ name = "Volt_AVG",        byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1303]},
+	{ name = "Volt_L1L2",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1304]},
+	{ name = "Volt_L2L3",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1305]},
+	{ name = "Volt_L3L1",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1306]},
+  { name = "Temp",            byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1307]},
+  { name = "P_Acive",         byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1309]}, # 유효 전력
+  { name = "P_Acive_Mhours",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1311]}, # 유효 전력 적산
+  { name = "Motor_Life_Day",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1315]}, # 구동 일수
+  { name = "Motor_Life_Hour", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1316]}, # 구동 시간
+  { name = "Motor_count", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1317]}, #모터 동작 횟수
+  { name = "Ground",          byte_order = "AB", data_type = "UFIXED", scale=0.001, address = [1318]},
   ]
 
+
+[[inputs.modbus]]
+  name = "Modbus-se2"
+  slave_id = 1
+  interval = "100ms"
+  timeout = "1s"
+  controller = "tcp://192.168.100.39:502"
+  holding_registers = [
+  { name = "Curr_MAX",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1299]},
+  { name = "Curr_IL1",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1300]},
+	{ name = "Curr_IL2",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1301]},
+	{ name = "Curr_IL3",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1302]},
+	{ name = "Volt_AVG",        byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1303]},
+	{ name = "Volt_L1L2",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1304]},
+	{ name = "Volt_L2L3",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1305]},
+	{ name = "Volt_L3L1",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1306]},
+  { name = "Temp",            byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1307]},
+  { name = "P_Acive",         byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1309]}, # 유효 전력
+  { name = "P_Acive_Mhours",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1311]}, # 유효 전력 적산
+  { name = "Motor_Life_Day",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1315]}, # 구동 일수
+  { name = "Motor_Life_Hour", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1316]}, # 구동 시간
+  { name = "Motor_count", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1317]}, #모터 동작 횟수
+  { name = "Ground",          byte_order = "AB", data_type = "UFIXED", scale=0.001, address = [1318]},
+  ]
+
+[[inputs.modbus]]
+  name = "Modbus-se3"
+  slave_id = 1
+  interval = "100ms"
+  timeout = "1s"
+  controller = "tcp://192.168.100.40:502"
+  holding_registers = [
+  { name = "Curr_MAX",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1299]},
+  { name = "Curr_IL1",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1300]},
+	{ name = "Curr_IL2",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1301]},
+	{ name = "Curr_IL3",        byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1302]},
+	{ name = "Volt_AVG",        byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1303]},
+	{ name = "Volt_L1L2",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1304]},
+	{ name = "Volt_L2L3",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1305]},
+	{ name = "Volt_L3L1",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1306]},
+  { name = "Temp",            byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1307]},
+  { name = "P_Acive",         byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1309]}, # 유효 전력
+  { name = "P_Acive_Mhours",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1311]}, # 유효 전력 적산
+  { name = "Motor_Life_Day",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1315]}, # 구동 일수
+  { name = "Motor_Life_Hour", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1316]}, # 구동 시간
+  { name = "Motor_count", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1317]}, #모터 동작 횟수
+  { name = "Ground",          byte_order = "AB", data_type = "UFIXED", scale=0.001, address = [1318]},
+  ]
+
+[[inputs.modbus]]
+  name = "Modbus-se4"
+  slave_id = 1
+  interval = "100ms"
+  timeout = "1s"
+  controller = "tcp://192.168.100.103:502"
+  holding_registers = [
+  { name = "Curr_MAX",        byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1299]},
+  { name = "Curr_IL1",        byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1300]},
+	{ name = "Curr_IL2",        byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1301]},
+	{ name = "Curr_IL3",        byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1302]},
+	{ name = "Volt_AVG",        byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1303]},
+	{ name = "Volt_L1L2",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1304]},
+	{ name = "Volt_L2L3",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1305]},
+	{ name = "Volt_L3L1",       byte_order = "AB", data_type = "UFIXED", scale=1.0,  address = [1306]},
+  { name = "Temp",            byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1307]},
+  { name = "P_Acive",         byte_order = "AB", data_type = "UFIXED", scale=0.01, address = [1309]}, # 유효 전력
+  { name = "P_Acive_Mhours",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1311]}, # 유효 전력 적산
+  { name = "Motor_Life_Day",  byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1315]}, # 구동 일수
+  { name = "Motor_Life_Hour", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1316]}, # 구동 시간
+  { name = "Motor_count", byte_order = "AB", data_type = "UFIXED", scale=1.0, address = [1317]}, #모터 동작 횟수
+  { name = "Ground",          byte_order = "AB", data_type = "UFIXED", scale=0.001, address = [1318]},
+  ]
+
+
+[[processors.date]]
+ tag_key = "DateTime"
+ date_format = "2006-01-02 15:04:05.00"
+ timezone = "Local"
 
 
 # [[aggregators.minmax]]
@@ -216,10 +258,6 @@ password = "its@1234"
 #   ## Configures which basic stats to push as fields
 #   # stats = ["count","diff","min","max","mean","non_negative_diff","stdev","s2","sum"]
 
-[[processors.date]]
- tag_key = "DateTime"
- date_format = "2006-01-02 15:04:05.00"
- timezone = "Local"
 ```
 
 `현재 설정값에서 변경 및 추가도 가능하다. 지금은 기본적인 데이터셋이다.`
@@ -273,7 +311,7 @@ password = "its@1234"
 
 <br>
 
-- 미리 만들어 놓은 dashboard  파일을 chronograf dashboard 화면에서 import 하여 저장한다.
+- 미리 만들어 놓은 dashboard 파일을 chronograf dashboard 화면에서 import 하여 저장한다.
 
 <br>
 
